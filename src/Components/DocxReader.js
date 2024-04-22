@@ -4,6 +4,7 @@ import { DOMParser } from "@xmldom/xmldom";
 import parse from "html-react-parser";
 // import classes from "./DocxReader2.module.css";
 import omml2mathml from "omml2mathml";
+import './DocxReader.css'
 // import MathJax from 'mathjax-full'
 // import EditorComponent from "./EditorComponent";
 // import xml2js from "xml-js";
@@ -1147,7 +1148,11 @@ const DocxReader = ({ onProcessedData }) => {
         
       </div>
       :
+      <div className="input_type_file_class">
+
       <input type="file" onChange={onFileUpload} name="docx-reader" />
+
+      </div>
 
     }
     <div className="prev_next_btn">{/* Navigation buttons */}

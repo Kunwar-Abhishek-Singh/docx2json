@@ -5,7 +5,8 @@
   margin-top: 15px;
   background-image: url("../public/images/background_img.avif");
   background-repeat: inherit;
-  /* width: 100%; */
+  width: 100%;
+  min-width: 80%;
   height: 600px;
   
 }
@@ -20,7 +21,7 @@
   margin-left: 80px;
   margin-top: 10px;
  
-  width: 650px;
+  width: auto;
   height: 530px;
   overflow-y: auto;
   /* overflow: hidden; */
@@ -29,9 +30,16 @@
   margin-left: 80px;
 }
 .download_json_file_btn{
-  margin-left: 200px;
+  margin-left: 10%;
   margin-top: 300px;
 
+}
+
+@media screen and (min-width: 480px) and (max-width: 600px) {
+  .download_json_file_btn {
+    /* background-color: lightgreen; */
+    margin-left: 0%;
+  }
 }
 
 
