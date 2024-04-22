@@ -3,13 +3,13 @@
 
 <p align="center">
   <a href="#">
-    <img src="assets/docx2json_1.png" width="130" height="130" alt="Docx 2 JSON image 1">
+    <img src="assets/docx2json_2.png" width="400" height="130" alt="Docx 2 JSON image 1">
   </a>
 </p>
 
 <p align="center">
   <a href="#">
-    <img src="assets/docx2json_2.png" width="130" height="130" alt="Docx 2 JSON image 2">
+    <img src="assets/docx2json_1.png" width="400" height="130" alt="Docx 2 JSON image 2">
   </a>
 </p>
 
