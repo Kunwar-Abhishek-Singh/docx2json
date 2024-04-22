@@ -5,6 +5,7 @@ import parse from "html-react-parser";
 // import classes from "./DocxReader2.module.css";
 import omml2mathml from "omml2mathml";
 import './DocxReader.css'
+import converter_img from "../../src/images/Web 1920 – 1.png"
 // import MathJax from 'mathjax-full'
 // import EditorComponent from "./EditorComponent";
 // import xml2js from "xml-js";
@@ -20,7 +21,7 @@ let HindioptionB = [];
 let HindioptionC = [];
 let HindioptionD = [];
 let answer = [];
-let section = [{option:"section"}];
+let section = [{ option: "section" }];
 let solutions = [];
 let hindisolutions = [];
 let base64array = [];
@@ -82,7 +83,7 @@ const QuestionOption = ({ label, option, images }) => (
             key={imageIndex}
             src={image.imageUrl}
             alt={`${imageIndex + 1}`}
-            
+
           />
         ))}
       </div>
@@ -153,7 +154,7 @@ const processParagraphs = async (docxData) => {
     answer: null,
     EnglishSolution: null,
     hindiSolution: null,
-    sections:{option:"section"}
+    sections: { option: "section" }
   };
   let drawingArray = [];
   let Questions = [];
@@ -583,7 +584,7 @@ const processParagraphs = async (docxData) => {
   //     flag = 1;
   //   }
   // }
-  
+
   let count = 1;
   let englishQuestionArray = []
 
@@ -692,7 +693,7 @@ const processParagraphs = async (docxData) => {
             answer: { option: "----empty----", image: [] },
             EnglishSolution: { option: "----empty----", image: [] },
             hindiSolution: { option: "----empty----", image: [] },
-            sections:{option:"section"}
+            sections: { option: "section" }
           };
           flag = 0;
         }
@@ -857,18 +858,18 @@ const processParagraphs = async (docxData) => {
         // console.log("enter into else for multiline")
         if (currentEnglishQuestion) {
           englishQuestionArray.push(element)
-          if(element!=""){
+          if (element != "") {
             currentEnglishQuestion.option += "<br />" + element;
             flag = 1;
           }
-          
+
         } else if (currentEnglishOption) {
           englishQuestionArray.push(element)
-          if(element!=""){
+          if (element != "") {
             currentEnglishOption.option += "<br />" + element;
             flag = 1;
           }
-          
+
         }
       }
     } else if (element && element.reference && currentEnglishQuestion) {
@@ -940,6 +941,7 @@ const processParagraphs = async (docxData) => {
 const DocxReader = ({ onProcessedData }) => {
   const [DocQuestions, setDocQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [radioValue, setRadioValue] = useState("0")
   // const [editorContent, setEditorContent] = useState("");
   const [equationVar, setEquationVar] = useState();
   const [mathml, setMathMl] = useState([]);
@@ -991,6 +993,11 @@ const DocxReader = ({ onProcessedData }) => {
     }
   };
 
+  const radio_change_handler = (e) => {
+    setRadioValue(e.target.value);
+
+  }
+
   // function numericToAlphabetic(index) {
   //   if (index >= 5) {
   //     return String.fromCharCode("a".charCodeAt(0) + (index - 6));
@@ -1020,9 +1027,39 @@ const DocxReader = ({ onProcessedData }) => {
 
   if (!currentQuestion) {
     return (
-      <div>
-        {/* <p>No questions to display.</p> */}
-        <input type="file" onChange={onFileUpload} name="docx-reader" />
+      <div className="main_class_for_input_field_and_converter_image">
+        <div>
+          <img className="converter_img_section" src={converter_img} alt="converter_img.png" />
+        </div>
+        <div className="master_input_collection_div">
+          <div className="input_section_collections border border-3">
+
+            {/* <p>No questions to display.</p> */}
+            <p>Do You want to convert the .docx file having MCQ Questions:- </p>
+            <label>Yes &nbsp; &nbsp; &nbsp; <input type="radio" name="option" value="1" checked={radioValue === "1"} onChange={radio_change_handler} /></label>
+            <label>No &nbsp; &nbsp; &nbsp; <input type="radio" name="option" value="0" checked={radioValue === "0"} onChange={radio_change_handler} /></label>
+            <div>
+              {radioValue === "1" ?
+                <div className="visible_invisible_input_section">
+                  <label>Enter Identifier for English Question:-</label>
+                  <input type="text" />
+                  <label>Enter Identifier for English Options:-</label>
+                  <input type="text" />
+                  <label>Enter Identifier for Hindi Questions:-</label>
+                  <input type="text" />
+                  <label>Enter Identifier for Hindi Options:-</label>
+                  <input type="text" />
+                  <label>Enter Identifier for English Solutions:-</label>
+                  <input type="text" />
+                  <label>Enter Identifier for Hindi Solutions:-</label>
+                  <input type="text" />
+                </div> : null}
+            </div>
+
+            <input type="file" onChange={onFileUpload} name="docx-reader" />
+          </div>
+        </div>
+
       </div>
     );
   }
@@ -1039,136 +1076,140 @@ const DocxReader = ({ onProcessedData }) => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-};
-  
- console.log("abhishek data")
- console.log(DocQuestions)
+  };
+
+  console.log("abhishek data")
+  console.log(DocQuestions)
   return (
     <>
 
-<div className="main_div_section">
-    
-    <div>
+      <div className="main_div_section">
 
-      {/* <div dangerouslySetInnerHTML={{ __html: string }} /> */}
-      {/* <div>{parse(sample2)}</div> */}
-      {DocQuestions?
-      
-    
-      <div className="question_showing_section border border-3">
-        {/* Display English option */}
-        {Object.keys(currentQuestion).map((key, index) => {
-          if (key.startsWith("englishQuestion")) {
-            return (
-              <QuestionOption
-                key={key}
-                label={`English Question`}
-                option={currentQuestion.englishQuestion.option}
-                images={currentQuestion.englishQuestion.image}
-              />
-            );
-          } else if (key.startsWith("englishOption")) {
-            {
-              /* Display English Options */
-            }
-            // const label = `(${numericToAlphabetic(index)})  `;
-            return (
-              <QuestionOption
-                key={key}
-                // label="English Question"
-                option={currentQuestion[key].option}
-                images={currentQuestion[key].image}
-              />
-            );
-          } else if (key.startsWith("hindiQuestion")) {
-            {
-              /* Display Hindi option */
-            }
-            return (
-              <QuestionOption
-                key={key}
-                label="Hindi Question"
-                option={currentQuestion.hindiQuestion.option}
-                images={currentQuestion.hindiQuestion.image}
-              />
-            );
-          } else if (key.startsWith("HindiOption")) {
-            {
-              /* Display Hindi Options */
-            }
-            // const label = `(${String.fromCharCode(97 + index)})  `;
-            // const label = `(${numericToAlphabetic(index)})  `;
-            return (
-              <QuestionOption
-                key={key}
-                // label={label}
-                option={currentQuestion[key].option}
-                images={currentQuestion[key].image}
-              />
-            );
-          } else if (key.startsWith("answer")) {
-            {
-              /* Display Answer */
-            }
-            return (
-              <QuestionOption
-                key={key}
-                label="Answer"
-                option={currentQuestion.answer.option}
-                images={currentQuestion.answer.image}
-              />
-            );
-          } else if (key.startsWith("EnglishSolution")) {
-            {
-              /* Display English Solution */
-            }
-            return (
-              <QuestionOption
-                key={key}
-                label="English Solution"
-                option={currentQuestion.EnglishSolution.option}
-                images={currentQuestion.EnglishSolution.image}
-              />
-            );
-          } else if (key.startsWith("hindiSolution")) {
-            {
-              /* Display Hindi Solution */
-            }
-            return (
-              <QuestionOption
-                key={key}
-                label="Hindi Solution"
-                option={currentQuestion.hindiSolution.option}
-                images={currentQuestion.hindiSolution.image}
-              />
-            );
+        <div>
+
+          {/* <div dangerouslySetInnerHTML={{ __html: string }} /> */}
+          {/* <div>{parse(sample2)}</div> */}
+          {DocQuestions ?
+
+
+            <div className="question_showing_section border border-3">
+              {/* Display English option */}
+              {Object.keys(currentQuestion).map((key, index) => {
+                if (key.startsWith("englishQuestion")) {
+                  return (
+                    <QuestionOption
+                      key={key}
+                      label={`English Question`}
+                      option={currentQuestion.englishQuestion.option}
+                      images={currentQuestion.englishQuestion.image}
+                    />
+                  );
+                } else if (key.startsWith("englishOption")) {
+                  {
+                    /* Display English Options */
+                  }
+                  // const label = `(${numericToAlphabetic(index)})  `;
+                  return (
+                    <QuestionOption
+                      key={key}
+                      // label="English Question"
+                      option={currentQuestion[key].option}
+                      images={currentQuestion[key].image}
+                    />
+                  );
+                } else if (key.startsWith("hindiQuestion")) {
+                  {
+                    /* Display Hindi option */
+                  }
+                  return (
+                    <QuestionOption
+                      key={key}
+                      label="Hindi Question"
+                      option={currentQuestion.hindiQuestion.option}
+                      images={currentQuestion.hindiQuestion.image}
+                    />
+                  );
+                } else if (key.startsWith("HindiOption")) {
+                  {
+                    /* Display Hindi Options */
+                  }
+                  // const label = `(${String.fromCharCode(97 + index)})  `;
+                  // const label = `(${numericToAlphabetic(index)})  `;
+                  return (
+                    <QuestionOption
+                      key={key}
+                      // label={label}
+                      option={currentQuestion[key].option}
+                      images={currentQuestion[key].image}
+                    />
+                  );
+                } else if (key.startsWith("answer")) {
+                  {
+                    /* Display Answer */
+                  }
+                  return (
+                    <QuestionOption
+                      key={key}
+                      label="Answer"
+                      option={currentQuestion.answer.option}
+                      images={currentQuestion.answer.image}
+                    />
+                  );
+                } else if (key.startsWith("EnglishSolution")) {
+                  {
+                    /* Display English Solution */
+                  }
+                  return (
+                    <QuestionOption
+                      key={key}
+                      label="English Solution"
+                      option={currentQuestion.EnglishSolution.option}
+                      images={currentQuestion.EnglishSolution.image}
+                    />
+                  );
+                } else if (key.startsWith("hindiSolution")) {
+                  {
+                    /* Display Hindi Solution */
+                  }
+                  return (
+                    <QuestionOption
+                      key={key}
+                      label="Hindi Solution"
+                      option={currentQuestion.hindiSolution.option}
+                      images={currentQuestion.hindiSolution.image}
+                    />
+                  );
+                }
+                return null;
+              })}
+
+            </div>
+            :
+            <div className="input_type_file_class">
+              {/* <input type="radio" />
+        <input type="text" />
+        <input type="text" />
+        <input type="text" />
+        <h1>Abhishek</h1> */}
+              {/* <input type="file" onChange={onFileUpload} name="docx-reader" /> */}
+
+            </div>
+
           }
-          return null;
-        })}
-        
+          <div className="prev_next_btn">{/* Navigation buttons */}
+            <button onClick={handlePrevious} disabled={currentIndex === 0} className="btn btn-primary m-2">
+              Previous
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={currentIndex === DocQuestions.length - 1}
+              className="btn btn-primary m-2"
+            >
+              Next
+            </button></div>
+        </div>
+        <div className="download_json_file_btn"> <button onClick={handleDownload} className="btn btn-success m-2">Download JSON File</button></div>
       </div>
-      :
-      <div className="input_type_file_class">
-
-      <input type="file" onChange={onFileUpload} name="docx-reader" />
-
-      </div>
-
-    }
-    <div className="prev_next_btn">{/* Navigation buttons */}
-        <button onClick={handlePrevious} disabled={currentIndex === 0} className="btn btn-primary m-2">
-          Previous
-        </button>
-        <button
-          onClick={handleNext}
-          disabled={currentIndex === DocQuestions.length - 1}
-          className="btn btn-primary m-2"
-        >
-          Next
-        </button></div>
-    </div>
-    <div className="download_json_file_btn"> <button onClick={handleDownload} className="btn btn-success m-2">Download JSON File</button></div>
-    </div>
     </>
   );
 };
